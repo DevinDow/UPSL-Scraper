@@ -14,8 +14,10 @@ file.close()
 
 
 # Beautiful Soup
-soup = BeautifulSoup(content, 'html.parser')
+soup = BeautifulSoup(content, 'lxml')
 
-print "tables = "
-table = soup.table
-print table.prettify()
+
+# Table Rows
+for tr in soup.table.find_all('tr'):
+    print(tr.prettify())
+
