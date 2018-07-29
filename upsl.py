@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+import re
 import requests
 
 
@@ -6,7 +7,7 @@ import requests
 #url_page = "http://www.upslsoccer.com/schedule"
 #content = requests.get(url_page).content
 
-input = open('upsl/a.html', 'r')
+input = open('upsl/upsl.html', 'r')
 content = input.read()
 input.close()
 
@@ -26,12 +27,14 @@ soup = BeautifulSoup(content, 'lxml')
 
 # Table Rows
 for tr in soup.table.find_all('tr'):
-    #print tr.select('td.schedule_venueName')
     tdVenue = tr.select('td.schedule_venueName')
+    #print tdVenue
     if (len(tdVenue) > 0):
-        print tdVenue[0]
         #print tr.prettify()
-        output.write(tr.prettify())
+        venueName = tdVenue[0].contents[0]
+        if (re.match('Lake Forest', venueName)):
+            #print venueName
+            output.write(tr.prettify())
     
 
 # Close Output File
