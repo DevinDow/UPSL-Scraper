@@ -19,5 +19,6 @@ soup = BeautifulSoup(content, 'lxml')
 
 # Table Rows
 for tr in soup.table.find_all('tr'):
-    print(tr.prettify())
+    for child in tr.find_all(class_='schedule_venueName'):
+        print(child)
 
