@@ -6,7 +6,7 @@ import boto3
 
 # Constants
 INPUT_FILE = 'upsl.html'
-OUTPUT_FILE = 'output.html'
+OUTPUT_FILE = 'index.html'
 S3_BUCKET = 'upsl-devin'
 
 
@@ -60,4 +60,3 @@ output.close()
 s3 = boto3.resource('s3')
 bucket = s3.Bucket(S3_BUCKET)
 bucket.upload_file(OUTPUT_FILE, 'index.html', ExtraArgs={'ACL':'public-read'})
-
