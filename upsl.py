@@ -6,7 +6,7 @@ import requests
 #url_page = "http://www.upslsoccer.com/schedule"
 #content = requests.get(url_page).content
 
-file = open('upsl/upsl.html', 'r')
+file = open('upsl/a.html', 'r')
 content = file.read()
 file.close()
 
@@ -14,14 +14,8 @@ file.close()
 
 
 # Beautiful Soup
-soup = BeautifulSoup(content, "lxml")
-
-print "Title = "
-print soup.find_all("title")
-
-#print "tr = "
-#print soup.find_all("tr")
+soup = BeautifulSoup(content, 'html.parser')
 
 print "tables = "
-tables = soup.find_all("table")
-print tables
+table = soup.table
+print table.prettify()
