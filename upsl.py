@@ -26,7 +26,7 @@ output = open (OUTPUT_FILE, 'w')
 output.write("<html>\n")
 output.write("\t<head><title>UPSL @ Lake Forest</title></head>\n")
 output.write("\t<body>\n")
-output.write("\t\t<table>\n")
+output.write("\t\t<table border='1'>\n")
 
 
 # Beautiful Soup
@@ -36,7 +36,6 @@ soup = BeautifulSoup(content, 'lxml')
 # Table Rows
 count = 0
 for tr in soup.table.find_all('tr'):
-    #TODO: capture date <tr>
     tdVenue = tr.select('td.schedule_venueName')
     #print tdVenue
     if (len(tdVenue) > 0):
@@ -44,10 +43,14 @@ for tr in soup.table.find_all('tr'):
         venueName = tdVenue[0].contents[0]
         if (re.match('Lake Forest', venueName)):
             #print venueName
+            output.write(trDate.prettify())
             output.write(tr.prettify())
             count += 1
+    else:
+        trDate = tr
     
 print("%d  rows collected" % (count))
+
 
 # Close Output File
 output.write("\t\t</table>\n")
