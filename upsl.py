@@ -22,16 +22,20 @@ content = respone.text
 #input.close()
 
 
+# Beautiful Soup
+soup = BeautifulSoup(content, 'lxml')
+
+
+
 # Write Output File
 output = open (OUTPUT_FILE, 'w')
 output.write("<html>\n")
-output.write("\t<head><title>UPSL @ Lake Forest</title></head>\n")
+output.write("\t<head>\n")
+for header in soup.head.contents:
+    output.write(str(header.encode('utf-8')))
+output.write("\t</head>\n")
 output.write("\t<body>\n")
 output.write("\t\t<table border='1'>\n")
-
-
-# Beautiful Soup
-soup = BeautifulSoup(content, 'lxml')
 
 
 # Table Rows
