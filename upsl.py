@@ -5,20 +5,21 @@ import boto3
 
 
 # Constants
-INPUT_FILE = 'upsl.html'
+#INPUT_FILE = 'upsl.html'
 OUTPUT_FILE = 'index.html'
 S3_BUCKET = 'upsl-devin'
 
 
 # Input
-#url_page = "http://www.upslsoccer.com/schedule"
-#content = requests.get(url_page).content
+url = "http://www.upslsoccer.com/schedule"
+headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+respone = requests.get(url, headers=headers)
+print("Response to GET %s = %s" % (url, respone))
+content = respone.text
 
-input = open(INPUT_FILE, 'r')
-content = input.read()
-input.close()
-
-#print content
+#input = open(INPUT_FILE, 'r')
+#content = input.read()
+#input.close()
 
 
 # Write Output File
@@ -62,4 +63,5 @@ output.close()
 # Upload to S3
 s3 = boto3.resource('s3')
 bucket = s3.Bucket(S3_BUCKET)
-bucket.upload_file(OUTPUT_FILE, 'index.html', ExtraArgs={'ACL':'public-read'})
+response = bucket.upload_file(OUTPUT_FILE, 'index.html', ExtraArgs={'ACL':'public-read'})
+print("Response to S3 Upload = %s" % (respone))
