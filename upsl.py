@@ -35,22 +35,27 @@ soup = BeautifulSoup(content, 'lxml')
 
 
 # Table Rows
-count = 0
+rowsMatched = 0
+rowsTotal = 0
+trDate = None
 for tr in soup.table.find_all('tr'):
     tdVenue = tr.select('td.schedule_venueName')
     #print tdVenue
     if (len(tdVenue) > 0):
         #print tr.prettify()
+        rowsTotal += 1
+        
         venueName = tdVenue[0].contents[0]
         if (re.match('Lake Forest', venueName)):
             #print venueName
             output.write(trDate.prettify())
             output.write(tr.prettify())
-            count += 1
+            rowsMatched += 1
     else:
         trDate = tr
     
-print("%d  rows collected" % (count))
+print("%d rows read" % (rowsTotal))
+print("%d rows matched" % (rowsMatched))
 
 
 # Close Output File

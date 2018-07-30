@@ -1,0 +1,6 @@
+TODO
+----
+- scrape Standings into hash table
+- Output improvements
+    - League
+    - Standings
