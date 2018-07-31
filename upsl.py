@@ -50,6 +50,8 @@ def scrapeSchedule():
                 #print venueName
 
                 # Add team ranks
+                #print("%s (%s) vs %s (%s)" % (teamA, standings[teamA], teamB, standings[teamB]))
+
                 tdTeamA = tr.select('td.schedule_team_A_name')
                 divTeamA = tdTeamA[0].select('div.scheduleTeamName')[0]
                 teamA = divTeamA.contents[0]
@@ -60,11 +62,18 @@ def scrapeSchedule():
                 teamB = divTeamB.contents[0]
                 divTeamB.append(" (%s)" % (standings[teamB]))
 
-                #print("%s (%s) vs %s (%s)" % (teamA, standings[teamA], teamB, standings[teamB]))
+                # color Conference
+                tdConference = tr.select('td.schedule_time')[1] # this column's class is also "time"
+                conference = tdConference.contents[0]
+                if (re.search("Pro", conference)):
+                    tdConference['style'] = "background:green"
+                elif (re.search("Championship", conference)):
+                    tdConference['style'] = "background:red"
 
                 output.write(trDate.prettify())
                 output.write(tr.prettify())
                 rowsMatched += 1
+                
         else:
             trDate = tr
         

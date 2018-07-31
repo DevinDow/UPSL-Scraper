@@ -1,10 +1,6 @@
 TODO
 ----
-- Output improvements
-    - League
-    - Standings
-        - add a <td> to the <tr> to show standings places of both teams.  Can I insert it before/after the team <td>?
-    
+
 API / Lambda
 ------------
 - move to us-west-2
