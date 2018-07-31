@@ -1,7 +1,5 @@
 TODO
 ----
-- divide into functions
-- scrape Standings into hash table
 - Output improvements
     - League
     - Standings

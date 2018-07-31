@@ -84,27 +84,28 @@ def scrapeStandings():
 
     # Table Rows
     rowsMatched = 0
-    rowsTotal = 0
-    for tr in soup.table.find_all('tr'):
-        tdRank = tr.select('td.standings_rankL')
-        print tdRank
-        if (len(tdRank) > 0):
-            print tr.prettify()
-            rowsTotal += 1
-            
-            #venueName = tdVenue[0].contents[0]
-            #if (re.match('Lake Forest', venueName)):
-            #    print venueName
-            #    rowsMatched += 1
+    for table in soup.find_all('table'):
+        for tr in table.find_all('tr'):
+            #print tr.prettify()
+            tdRank = tr.select('td.standingsRankL')
+            #print tdRank
+            tdTeam = tr.select('td.standingsTeamNameL')
+            #print tdTeam
 
-    print("%d rows read" % (rowsTotal))
+            if (len(tdRank) > 0 and len(tdTeam) > 0):
+                rank = tdRank[0].contents[0]
+                #print tdTeam[0].a.b
+                team = tdTeam[0].a.b.contents[0]
+                print("%s - %s" % (rank, team))
+                rowsMatched += 1
+
     print("%d rows matched" % (rowsMatched))
 
 
 
 def main():
-    #scrapeStandings()
-    scrapeSchedule()
+    scrapeStandings()
+    #scrapeSchedule()
     
 
 if __name__ == "__main__":
