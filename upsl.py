@@ -38,6 +38,7 @@ def scrapeSchedule():
     rowsMatched = 0
     rowsTotal = 0
     trDate = None
+    prevDate = ''
     for tr in soup.table.find_all('tr'):
         tdVenue = tr.select('td.schedule_venueName')
         #print tdVenue
@@ -71,7 +72,10 @@ def scrapeSchedule():
                 elif (re.search("Championship", conference)):
                     tdConference['style'] = "background:red"
 
-                output.write(trDate.prettify())
+                date = trDate.select('td')[0].contents[0]
+                if (prevDate != date):
+                    output.write(trDate.prettify())
+                    prevDate = date
                 output.write(tr.prettify())
                 rowsMatched += 1
                 
