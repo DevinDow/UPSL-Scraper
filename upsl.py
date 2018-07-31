@@ -5,18 +5,16 @@ import boto3
 
 
 def scrapeSchedule():
+    print("\n\n*** scrapeSchedule()")
+
     # Constants
     OUTPUT_FILE = 'index.html'
     S3_BUCKET = 'upsl-devin'
     
     
     # Input from web
-    url = "http://www.upslsoccer.com/schedule"
-    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
-    respone = requests.get(url, headers=headers)
-    print("Response to GET %s = %s" % (url, respone))
-    content = respone.text
-    
+    content = scrapeWeb("http://www.upslsoccer.com/schedule")
+
     # Beautiful Soup
     soup = BeautifulSoup(content, 'lxml')
     
@@ -66,19 +64,17 @@ def scrapeSchedule():
     # Upload to S3
     s3 = boto3.resource('s3')
     bucket = s3.Bucket(S3_BUCKET)
-    response = bucket.upload_file(OUTPUT_FILE, 'index.html', ExtraArgs={'ACL':'public-read'})
-    print("Response to S3 Upload = %s" % (respone))
+    bucket.upload_file(OUTPUT_FILE, 'index.html', ExtraArgs={'ACL':'public-read'})
+    print("\"%s\" uploaded to \"%s\"" % (OUTPUT_FILE, bucket.name))
 
 
 
 def scrapeStandings():
-    # Input from web
-    url = "http://www.upslsoccer.com/standings"
-    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
-    respone = requests.get(url, headers=headers)
-    print("Response to GET %s = %s" % (url, respone))
-    content = respone.text
+    print("\n\n*** scrapeStandings()")
     
+    # Input from web
+    content = scrapeWeb("http://www.upslsoccer.com/standings")
+
     # Beautiful Soup
     soup = BeautifulSoup(content, 'lxml')
 
@@ -96,16 +92,24 @@ def scrapeStandings():
                 rank = tdRank[0].contents[0]
                 #print tdTeam[0].a.b
                 team = tdTeam[0].a.b.contents[0]
-                print("%s - %s" % (rank, team))
+                #print("%s - %s" % (rank, team))
                 rowsMatched += 1
 
     print("%d rows matched" % (rowsMatched))
 
 
 
+def scrapeWeb(url):
+    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+    respone = requests.get(url, headers=headers)
+    print("Response to GET %s = %s" % (url, respone))
+    return respone.text
+    
+
+
 def main():
     scrapeStandings()
-    #scrapeSchedule()
+    scrapeSchedule()
     
 
 if __name__ == "__main__":
