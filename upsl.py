@@ -77,6 +77,8 @@ def scrapeSchedule():
                 
         else:
             trDate = tr
+            trDate['style'] = "background:yellow"
+
         
     print("%d rows read" % (rowsTotal))
     print("%d rows matched" % (rowsMatched))
