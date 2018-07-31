@@ -4,6 +4,9 @@ import requests
 import boto3
 
 
+standings = {}
+
+
 def scrapeSchedule():
     print("\n\n*** scrapeSchedule()")
 
@@ -41,9 +44,20 @@ def scrapeSchedule():
             #print tr.prettify()
             rowsTotal += 1
             
+            # Add <tr> to output
             venueName = tdVenue[0].contents[0]
             if (re.match('Lake Forest', venueName)):
                 #print venueName
+
+                # Add team ranks
+                tdTeamA = tr.select('td.schedule_team_A_name')
+                #print tdTeamA
+                teamA = tdTeamA[0].select('div.scheduleTeamName')[0].contents[0]
+                tdTeamB = tr.select('td.schedule_team_B_name')
+                #print tdTeamB
+                teamB = tdTeamB[0].select('div.scheduleTeamName')[0].contents[0]
+                print("%s (%s) vs %s (%s)" % (teamA, standings[teamA], teamB, standings[teamB]))
+
                 output.write(trDate.prettify())
                 output.write(tr.prettify())
                 rowsMatched += 1
@@ -93,6 +107,7 @@ def scrapeStandings():
                 #print tdTeam[0].a.b
                 team = tdTeam[0].a.b.contents[0]
                 #print("%s - %s" % (rank, team))
+                standings[team] = rank
                 rowsMatched += 1
 
     print("%d rows matched" % (rowsMatched))
