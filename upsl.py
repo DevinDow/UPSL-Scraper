@@ -77,6 +77,8 @@ def scrapeSchedule():
                 
         else:
             trDate = tr
+            #print trDate.prettify()
+            del trDate['class'] # BUG: some trDate rows are invisible
             trDate['style'] = "background:yellow"
 
         
