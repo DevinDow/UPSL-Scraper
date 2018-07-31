@@ -51,12 +51,16 @@ def scrapeSchedule():
 
                 # Add team ranks
                 tdTeamA = tr.select('td.schedule_team_A_name')
-                #print tdTeamA
-                teamA = tdTeamA[0].select('div.scheduleTeamName')[0].contents[0]
+                divTeamA = tdTeamA[0].select('div.scheduleTeamName')[0]
+                teamA = divTeamA.contents[0]
+                divTeamA.append(" (%s)" % (standings[teamA]))
+
                 tdTeamB = tr.select('td.schedule_team_B_name')
-                #print tdTeamB
-                teamB = tdTeamB[0].select('div.scheduleTeamName')[0].contents[0]
-                print("%s (%s) vs %s (%s)" % (teamA, standings[teamA], teamB, standings[teamB]))
+                divTeamB = tdTeamB[0].select('div.scheduleTeamName')[0]
+                teamB = divTeamB.contents[0]
+                divTeamB.append(" (%s)" % (standings[teamB]))
+
+                #print("%s (%s) vs %s (%s)" % (teamA, standings[teamA], teamB, standings[teamB]))
 
                 output.write(trDate.prettify())
                 output.write(tr.prettify())
