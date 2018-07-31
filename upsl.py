@@ -2,7 +2,8 @@ from bs4 import BeautifulSoup
 import re
 import requests
 import boto3
-
+import datetime
+import pytz
 
 standings = {}
 
@@ -83,6 +84,7 @@ def scrapeSchedule():
     
     # Close Output File
     output.write("\t\t</table>\n")
+    output.write("\t\t<h1>Created %s</h1>\n" % (datetime.datetime.now(pytz.timezone('US/Pacific'))))
     output.write("\t</body>\n")
     output.write("</html>\n")
     output.close()
@@ -91,7 +93,7 @@ def scrapeSchedule():
     # Upload to S3
     s3 = boto3.resource('s3')
     bucket = s3.Bucket(S3_BUCKET)
-    bucket.upload_file(OUTPUT_FILE, 'index.html', ExtraArgs={'ACL':'public-read'})
+    bucket.upload_file(OUTPUT_FILE, 'index.html', ExtraArgs={'ACL':'public-read', 'ContentType':'text/html'})
     print("\"%s\" uploaded to \"%s\"" % (OUTPUT_FILE, bucket.name))
 
 
