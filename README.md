@@ -11,3 +11,8 @@
 - easy_install boto3
 - easy_install pytz
 - easy_install lxml
+
+# AWS Credentials
+
+https://aws.amazon.com/cli/
+- aws configure
