@@ -31,6 +31,7 @@ def scrapeSchedule():
     #    output.write(str(header.encode('utf-8')))
     output.write("\t</head>\n")
     output.write("\t<body>\n")
+    output.write("\t\t<h1>Finding all 'Lake Forest' & 'Orange County Great Park'</h1>\n")
     output.write("\t\t<table border='1'>\n")
     
     
@@ -48,36 +49,41 @@ def scrapeSchedule():
             
             # Add <tr> to output
             venueName = tdVenue[0].contents[0]
-            if (re.match('Lake Forest', venueName) or re.match('TBD', venueName)):
-                #print venueName
+            if (re.match('Lake Forest', venueName) or re.match('Orange County Great Park', venueName)):# or re.match('TBD', venueName)):
+                #print(venueName)
                 # grey TBD venue
                 if (re.match('TBD', venueName)):
                     tr['style'] = "background:lightgrey"
 
                 # Add team ranks
-                #print("%s (%s) vs %s (%s)" % (teamA, standings[teamA], teamB, standings[teamB]))
-
                 tdTeamA = tr.select('td.schedule_team_A_name')
                 divTeamA = tdTeamA[0].select('div.scheduleTeamName')[0]
                 teamA = divTeamA.contents[0]
-                if (teamA != 'TBA' and teamA != 'BYE'):
+                if (teamA in standings):
                     divTeamA.append(" (%s)" % (standings[teamA]))
 
                 tdTeamB = tr.select('td.schedule_team_B_name')
                 divTeamB = tdTeamB[0].select('div.scheduleTeamName')[0]
                 teamB = divTeamB.contents[0]
-                if (teamB != 'TBA' and teamB != 'BYE'):
+                if (teamB in standings):
                     divTeamB.append(" (%s)" % (standings[teamB]))
+
+                #if (teamA in standings and teamB in standings):
+                #    print("%s (%s) vs %s (%s)" % (teamA, standings[teamA], teamB, standings[teamB]))
+                print("%s vs %s" % (teamA, teamB))
 
                 # color Conference
                 tdConference = tr.select('td.schedule_time')[1] # this column's class is also "time"
-                conference = tdConference.contents[0]
+                conference = ""
+                if (len(tdConference.contents)):
+                    conference = tdConference.contents[0]
+
                 if (re.search("Pro", conference)):
                     tdConference['style'] = "background:green"
                 elif (re.search("Championship", conference)):
                     tdConference['style'] = "background:red"
-                else:
-                    continue
+                #else: 
+                #    continue # skips all other Conferences (including US Open Cup, which have no Conference)
 
                 date = trDate.select('td')[0].contents[0]
                 if (prevDate != date):
@@ -126,17 +132,17 @@ def scrapeStandings():
     rowsMatched = 0
     for table in soup.find_all('table'):
         for tr in table.find_all('tr'):
-            #print tr.prettify()
+            #print(tr.prettify())
             tdRank = tr.select('td.standingsRankL')
-            #print tdRank
+            #print(tdRank)
             tdTeam = tr.select('td.standingsTeamNameL')
-            #print tdTeam
+            #print(tdTeam)
 
             if (len(tdRank) > 0 and len(tdTeam) > 0):
                 rank = tdRank[0].contents[0]
-                #print tdTeam[0].a.b
+                #print(tdTeam[0].a.b)
                 team = tdTeam[0].a.b.contents[0]
-                #print("%s - %s" % (rank, team))
+                print("%s - %s" % (rank, team))
                 standings[team] = rank
                 rowsMatched += 1
 
