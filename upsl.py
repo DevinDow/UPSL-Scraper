@@ -70,7 +70,7 @@ def scrapeSchedule():
 
                 #if (teamA in standings and teamB in standings):
                 #    print("%s (%s) vs %s (%s)" % (teamA, standings[teamA], teamB, standings[teamB]))
-                print("%s vs %s" % (teamA, teamB))
+                #print("%s vs %s" % (teamA, teamB))
 
                 # color Conference
                 tdConference = tr.select('td.schedule_time')[1] # this column's class is also "time"
@@ -114,8 +114,14 @@ def scrapeSchedule():
     # Upload to S3
     s3 = boto3.resource('s3')
     bucket = s3.Bucket(S3_BUCKET)
-    bucket.upload_file(OUTPUT_FILE, 'index.html', ExtraArgs={'ACL':'public-read', 'ContentType':'text/html'})
-    print("\"%s\" uploaded to \"%s\"" % (OUTPUT_FILE, bucket.name))
+    bucket.upload_file(OUTPUT_FILE, OUTPUT_FILE, ExtraArgs={'ContentType':'text/html'})
+    print("\nAWS S3: Uploaded \"%s\" to \"%s\" bucket." % (OUTPUT_FILE, bucket.name))
+
+    # Make Public
+    object_acl = s3.ObjectAcl(S3_BUCKET, OUTPUT_FILE)
+    response = object_acl.put(ACL='public-read')
+    responseMetaData = response['ResponseMetadata']
+    print("AWS S3: Make Public: response=%s\n" % (responseMetaData['HTTPStatusCode']))
 
 
 
@@ -142,7 +148,7 @@ def scrapeStandings():
                 rank = tdRank[0].contents[0]
                 #print(tdTeam[0].a.b)
                 team = tdTeam[0].a.b.contents[0]
-                print("%s - %s" % (rank, team))
+                #print("%s - %s" % (rank, team))
                 standings[team] = rank
                 rowsMatched += 1
 

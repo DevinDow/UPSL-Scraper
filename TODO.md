@@ -1,8 +1,9 @@
-TODO
-----
+# TODO
 
-API / Lambda
-------------
+- TBD venues in our conferences
+
+## API / Lambda
+
 - move to us-west-2
 - requires packaging dependencies (https://docs.aws.amazon.com/lambda/latest/dg/lambda-python-how-to-create-deployment-package.html)
  
