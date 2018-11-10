@@ -27,8 +27,8 @@ def scrapeSchedule():
     output = open (OUTPUT_FILE, 'w')
     output.write("<html>\n")
     output.write("\t<head>\n")
-    for header in soup.head.contents:
-        output.write(str(header.encode('utf-8')))
+    #for header in soup.head.contents:
+    #    output.write(str(header.encode('utf-8')))
     output.write("\t</head>\n")
     output.write("\t<body>\n")
     output.write("\t\t<table border='1'>\n")
