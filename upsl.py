@@ -7,6 +7,8 @@ import pytz
 
 standings = {}
 
+scheduleUrl = "http://www.upslsoccer.com/schedule"
+standingsUrl = "http://www.upslsoccer.com/standings"
 
 def scrapeSchedule():
     print("\n\n*** scrapeSchedule()")
@@ -17,7 +19,7 @@ def scrapeSchedule():
     
     
     # Input from web
-    content = scrapeWeb("http://www.upslsoccer.com/schedule")
+    content = scrapeWeb(scheduleUrl)
 
     # Beautiful Soup
     soup = BeautifulSoup(content, 'lxml')
@@ -31,6 +33,9 @@ def scrapeSchedule():
     #    output.write(str(header.encode('utf-8')))
     output.write("\t</head>\n")
     output.write("\t<body>\n")
+    output.write("\t\t<a href='%s'>Schedule</a>\n" % scheduleUrl)
+    output.write("\t\t<a href='%s'>Standings</a>\n" % standingsUrl)
+    output.write("\t\t<p>Created %s</p>\n" % (datetime.datetime.now(pytz.timezone('US/Pacific'))))
     output.write("\t\t<h1>Finding all 'Lake Forest' & 'Orange County Great Park'</h1>\n")
     output.write("\t\t<table border='1'>\n")
     
@@ -105,7 +110,6 @@ def scrapeSchedule():
     
     # Close Output File
     output.write("\t\t</table>\n")
-    output.write("\t\t<h1>Created %s</h1>\n" % (datetime.datetime.now(pytz.timezone('US/Pacific'))))
     output.write("\t</body>\n")
     output.write("</html>\n")
     output.close()
@@ -129,7 +133,7 @@ def scrapeStandings():
     print("\n\n*** scrapeStandings()")
     
     # Input from web
-    content = scrapeWeb("http://www.upslsoccer.com/standings")
+    content = scrapeWeb(standingsUrl)
 
     # Beautiful Soup
     soup = BeautifulSoup(content, 'lxml')
