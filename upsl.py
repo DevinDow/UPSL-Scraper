@@ -1,3 +1,9 @@
+# UPSL Soccer
+# Since there are too many conferences in UPSL, navigating their site is difficult to find the info I care about.
+# I'd like to know about games near me.  Those venues are 'Lake Forest Sports Park' & 'OC Great Park'
+# This app will grab the HTML from the schedule and pull out all games at those venues.
+# It will also parse the Standings so I can see where the 2 teams stand.
+
 from bs4 import BeautifulSoup
 import re
 import requests
@@ -5,12 +11,16 @@ import boto3
 import datetime
 import pytz
 
-standings = {}
+standings = {} # stores team names mapped to standings rank.  filled by scrapeStandings()
 
 scheduleUrl = "http://www.upslsoccer.com/schedule"
 standingsUrl = "http://www.upslsoccer.com/standings"
 
+
+
 def scrapeSchedule():
+    """Scrape the Schedule to find games at local venues."""
+
     print("\n\n*** scrapeSchedule()")
 
     # Constants
@@ -136,6 +146,8 @@ def scrapeSchedule():
 
 
 def scrapeStandings():
+    """Scrape the Standings and store in standings{} mapping each team name to its rank."""
+
     print("\n\n*** scrapeStandings()")
     
     # Input from web
@@ -167,6 +179,8 @@ def scrapeStandings():
 
 
 def scrapeWeb(url):
+    """Get the HTML for a URL."""
+
     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
     respone = requests.get(url, headers=headers)
     print("Response to GET %s = %s" % (url, respone))
@@ -175,9 +189,11 @@ def scrapeWeb(url):
 
 
 def main():
+    """First scrape Standings, then scrape Schedule."""
+
     scrapeStandings()
     scrapeSchedule()
     
-
+    
 if __name__ == "__main__":
     main()
