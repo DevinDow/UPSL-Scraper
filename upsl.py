@@ -16,6 +16,12 @@ def scrapeSchedule():
     # Constants
     OUTPUT_FILE = 'index.html'
     S3_BUCKET = 'upsl-devin'
+
+    LAKE_FOREST = 'Lake Forest'
+    GREAT_PARK = 'Great Park'
+    TBD = 'TBD'
+    DIVISION_1 = 'Division I'
+    DIVISION_2 = 'Division II'
     
     
     # Input from web
@@ -36,7 +42,7 @@ def scrapeSchedule():
     output.write("\t\t<a href='%s'>Schedule</a>\n" % scheduleUrl)
     output.write("\t\t<a href='%s'>Standings</a>\n" % standingsUrl)
     output.write("\t\t<p>Created %s</p>\n" % (datetime.datetime.now(pytz.timezone('US/Pacific'))))
-    output.write("\t\t<h1>Finding all 'Lake Forest' & 'Orange County Great Park'</h1>\n")
+    output.write("\t\t<h1>Finding all %s & %s</h1>\n" % (LAKE_FOREST, GREAT_PARK))
     output.write("\t\t<table border='1'>\n")
     
     
@@ -54,10 +60,10 @@ def scrapeSchedule():
             
             # Add <tr> to output
             venueName = tdVenue[0].contents[0]
-            if (re.match('Lake Forest', venueName) or re.match('Orange County Great Park', venueName)):# or re.match('TBD', venueName)):
+            if (re.match(LAKE_FOREST, venueName) or re.match(GREAT_PARK, venueName)):# or re.match(TBD, venueName)):
                 #print(venueName)
                 # grey TBD venue
-                if (re.match('TBD', venueName)):
+                if (re.match(TBD, venueName)):
                     tr['style'] = "background:lightgrey"
 
                 # Add team ranks
@@ -83,10 +89,10 @@ def scrapeSchedule():
                 if (len(tdConference.contents)):
                     conference = tdConference.contents[0]
 
-                if (re.search("Pro", conference)):
-                    tdConference['style'] = "background:green"
-                elif (re.search("Championship", conference)):
+                if (re.search(DIVISION_2, conference)):
                     tdConference['style'] = "background:red"
+                elif (re.search(DIVISION_1, conference)):
+                    tdConference['style'] = "background:green"
                 #else: 
                 #    continue # skips all other Conferences (including US Open Cup, which have no Conference)
 
