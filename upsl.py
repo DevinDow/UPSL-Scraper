@@ -70,7 +70,8 @@ def scrapeSchedule():
             
             # Add <tr> to output
             venueName = tdVenue[0].contents[0]
-            if (re.match(LAKE_FOREST, venueName) or re.match(GREAT_PARK, venueName)):# or re.match(TBD, venueName)):
+            #print(venueName)
+            if (re.search(LAKE_FOREST, venueName) or re.search(GREAT_PARK, venueName)):# or re.match(TBD, venueName)):
                 #print(venueName)
                 # grey TBD venue
                 if (re.match(TBD, venueName)):
